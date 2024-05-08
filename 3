@@ -1,0 +1,52 @@
+#include <stdio.h> // For standard I/O
+#include <stdbool.h> // For boolean type
+
+int main() {
+    int buffer[10]; 
+    int bufsize = 10;
+    int in = 0;
+    int out = 0;
+    int produce, consume;
+    int choice = 0;
+
+    while (1) {
+        printf("\n1. Produce \t2. Consume \t3. Exit");
+        printf("\nEnter your choice: ");
+        scanf("\n%d",&choice);
+       //0 ,1 ,2 , 3 , 9 +1 10 %10 
+
+        switch (choice) {
+            case 1: // Produce
+                if ((in + 1) % bufsize == out) { //1+1 %10  =2 % 10  ==
+                    printf("\nBuffer is Full");
+                } else {
+                    printf("\nEnter the value to produce: ");
+                    scanf("%d",&produce); //2
+                        buffer[in] = produce; //2
+                        in = (in + 1) % bufsize; // 1+ 1 %10 = 2
+                 //[10 , 02]  
+                }
+                break;
+
+            case 2: // Consume
+                if (in == out) { // []
+                    printf("\nBuffer is Empty");
+                } else {
+                    consume = buffer[out];  //10 
+                    printf("\nThe consumed value is: %d", consume);
+                    out = (out + 1) % bufsize; // 0+1 %10 = 1
+                }
+                break;
+            case 3:
+                    return 0; // program initially 1 
+                   printf("Exiting...\n");
+                   break;
+
+            default:
+                printf("Invalid choice. Please try again.");
+                break;
+        }
+    }
+
+
+}
