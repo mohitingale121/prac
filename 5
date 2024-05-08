@@ -1,0 +1,75 @@
+#include <stdio.h> // For standard I/O operations
+#include <string.h> // For string operations like strcmp
+
+#define MAX_FILES 30 // Maximum number of files in the table
+#define MAX_NAME_LENGTH 20 // Maximum length for file names
+
+struct fileTable {
+    char name[MAX_NAME_LENGTH]; // File name
+    int sb; // Starting block
+    int nob; // Number of blocks
+};
+
+int main() {
+    struct fileTable ft[MAX_FILES]; // File table array
+    int i, j, n;
+    char s[MAX_NAME_LENGTH]; // Search query for file name
+
+    // Get the number of files
+    printf("Enter number of files: ");
+    if (scanf("%d", &n) != 1 || n <= 0 || n > MAX_FILES) {
+        printf("Invalid number of files.\n");
+        return 1; // Exit on invalid input
+    }
+
+    // Enter file details
+    for (i = 0; i < n; i++) {
+        printf("\nEnter file name %d: ", i + 1);
+        scanf("%s", ft[i].name);
+
+        printf("Enter starting block for file %d: ", i + 1);
+        if (scanf("%d", &ft[i].sb) != 1) {
+            printf("Invalid input for starting block.\n");
+            return 1; // Exit on invalid input
+        }
+
+        printf("Enter number of blocks for file %d: ", i + 1);
+        if (scanf("%d", &ft[i].nob) != 1) {
+            printf("Invalid input for number of blocks.\n");
+            return 1; // Exit on invalid input
+        }
+    }
+
+    // Search for a file
+    printf("\nEnter the file name to be searched: ");
+    scanf("%s", s); // Get the search query
+
+    // Search through the file table
+    for (i = 0; i < n; i++) {
+        if (strcmp(s, ft[i].name) == 0) { // File found
+            break; 
+        }
+    }
+
+    if (i == n) { // If no matching file was found
+        printf("File not found.\n");
+    } else { // If the file was found
+
+        printf("the value of i %d\n\t",i);
+
+
+        printf("\nFILE NAME\tSTART BLOCK\tNO. OF BLOCKS\tBLOCKS OCCUPIED\n");
+        printf("%s\t\t%d\t\t%d\t\t", ft[i].name, ft[i].sb, ft[i].nob);
+        
+        // Display the blocks occupied by the file
+        for (j = 0; j < ft[i].nob; j++) {
+            printf("%d", ft[i].sb + j);
+            if (j < ft[i].nob - 1) {
+                printf(", "); // Separate block numbers with commas
+            }
+        }
+        printf("\n"); // Newline after displaying block numbers
+    }
+
+    return 0;
+}
