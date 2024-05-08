@@ -1,0 +1,70 @@
+#include <stdio.h>
+
+#define MAX 100
+
+int main()
+{
+    int Arrival_time[MAX], Burst_time[MAX], Completion_time[MAX] ,Turn_Around_time[MAX], Waiting_time[MAX];
+    
+    int i, j;
+    float Average_Turn_Around_time = 0;
+    float Average_Waiting_time = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &j);
+
+    if (j <= 0)
+    {
+        printf("Number of processes should be greater than zero.\n");
+        return 1; // Exit if input is invalid
+    }
+
+    printf("Enter Arrival Times:\n");
+    for (i = 0; i < j; i++)
+    {
+        printf("Arrival time for process %d: ", i + 1);
+        scanf("%d", &Arrival_time[i]);
+    }
+
+    printf("Enter Burst Times:\n");
+    for (i = 0; i < j; i++)
+    {
+        printf("Burst time for process %d: ", i + 1);
+        scanf("%d", &Burst_time[i]);
+    }
+
+    // Calculate Completion Time   1 0
+    Completion_time[0] = Burst_time[0];
+    for (i = 1; i < j; i++)
+    {
+        Completion_time[i] = Completion_time[i - 1] + Burst_time[i]; 
+        //1th 5 + 6 =11
+        //2th 11+7 = 18
+    }
+
+    // Calculate Turnaround and Waiting Times
+    for (i = 0; i < j; i++)
+    {
+        Turn_Around_time[i] = Completion_time[i] - Arrival_time[i];
+        Waiting_time[i] = Turn_Around_time[i] - Burst_time[i];
+        Average_Waiting_time += Waiting_time[i]; //2 
+        Average_Turn_Around_time += Turn_Around_time[i];  //18
+    }
+
+    // Print results
+    printf("\nProcess\tArrival(T)\tBurst(T)\tCompletion(T)\tTurnAround(T)\tWaiting(T)\n");
+    for (i = 0; i < j; i++)
+    {
+        printf("P[%d]\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
+               i + 1, Arrival_time[i], Burst_time[i], Completion_time[i],
+               Turn_Around_time[i], Waiting_time[i]);
+    }
+
+    if (j > 0)
+    { //2/3
+        printf("\nAverage Turn Around Time: %.2f\n", Average_Turn_Around_time / j);
+        printf("Average Waiting Time: %.2f\n", Average_Waiting_time / j);
+    }
+
+    return 0;
+}
