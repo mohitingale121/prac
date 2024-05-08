@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int ch1;
+    char msg[1000]; // file text save 
+    char old_name[100], new_name[100]; // renaming 
+    char source_file[100], target_file[100]; // copy 
+    FILE *fptr = NULL , *source =NULL , *target = NULL; 
+    char ch;
+
+    while (1) // infinte true 
+    {
+        printf("\n1.create file and write data\n");
+        printf("2.read data\n");
+        printf("3.rename file\n");
+        printf("4.copy data of file to another file\n");
+        printf("5.exit\n");
+        scanf("%d",&ch1); 
+
+        switch (ch1)
+        {
+        case 1:
+            fptr = fopen("new.txt","w"); 
+            if (fptr==NULL)
+            {
+                printf("error occured\n");
+                              exit(1);
+
+            }
+            printf("enter the message :");
+            scanf(" %[^\n]",msg); //insert
+            fprintf(fptr,"%s",msg); // msg data  fptr fprintf 
+            fclose(fptr); //close 
+            break;
+        case 2:
+            fptr = fopen("new.txt","r");
+
+            if( fptr == NULL)
+            {
+                printf("error occured\n");
+                exit(1);
+
+            }
+            if (fscanf(fptr ,"%999s",msg) == 1)
+            {
+                printf("message is %s\n", msg);
+                }
+                else{
+                    printf("no data found\n");
+                }
+                fclose(fptr);
+                break;
+            case 3:
+                printf("enter the old file name: ");
+                scanf("%99s",&old_name);
+                printf("\nenter the new name of the file:");
+                scanf("%99s",new_name);
+
+                if (rename(old_name, new_name) == 0)
+                {
+                    printf("\nrenameing successfull");
+                    
+                }
+                else{
+                    printf("unable to rename the file");
+                }
+                break;
+                
+            case 4: 
+
+                printf("enter the source file name \n");
+                scanf("%99s", &source_file);
+                
+                source = fopen(source_file,"r");
+                if (source == NULL)
+                {
+                    printf("error occured in source file\n");
+                    exit(0);
+                }
+
+
+                printf("enter the target file name \n");
+                scanf("%99s", &target_file);
+                
+                target = fopen(target_file ,"w"); //pc2.txt
+                if (target == NULL)
+                {
+                    printf("error occured in target file\n");
+                    exit(0);
+                }
+
+                while ((ch = fgetc(source) )!= EOF) //end of file
+                { 
+                    fputc(ch, target);
+                }
+                printf("data successfully copied\n");
+                break;
+                
+
+                
+
+            case 5:
+                printf("exiting the porgram\n");
+                return 0;
+                break;
+        default:
+        
+            break;
+        }
+
+        
+
+    }
+}
