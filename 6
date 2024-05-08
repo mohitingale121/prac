@@ -1,0 +1,102 @@
+#include <stdio.h>  // Standard input/output functions
+#include <string.h> // String manipulation functions
+#include <stdlib.h> // For exit
+#include <stdbool.h> // For bool, true, false
+
+#define MAX_FILES 10       // Maximum number of files in a directory
+#define MAX_FILENAME 10    // Maximum filename length
+#define MAX_DIRNAME 10     // Maximum directory name length
+
+struct Directory {
+    char dname[MAX_DIRNAME];            // Directory name
+    char fname[MAX_FILES][MAX_FILENAME]; // Array of filenames
+    int fcnt;                            // File count
+};
+
+int main() {
+    struct Directory dir; // Directory structure
+    dir.fcnt = 0; // Initialize file count to zero
+    int i, ch;
+    char f[MAX_FILENAME]; // Buffer for file name
+
+    printf("Enter name of directory: ");
+    scanf("%9s", dir.dname); // Limit input to avoid overflow
+
+    bool running = true; // Flag to control the main loop
+    while (running) { // Loop until the user exits
+        printf("\n1. Create File\t2. Delete File\t3. Search File\n4. Display Files\t5. Exit\nEnter your choice: ");
+        if (scanf("%d", &ch) != 1) { // Check if input is valid
+            printf("Invalid input.\n");
+            return 1; // Exit if invalid input
+        }
+
+        switch (ch) {
+            case 1: // Create File
+                if (dir.fcnt >= MAX_FILES) { // Check if directory is full
+                    printf("Directory is full. Cannot create more files.\n");
+                } else {
+                    printf("Enter the name of the file: ");
+                    scanf("%9s", dir.fname[dir.fcnt]); // Limit filename length
+                    dir.fcnt++; // Increment file count
+                }
+                break;
+
+            case 2: // Delete File
+                printf("Enter the name of the file to delete: ");
+                scanf("%9s", f); // Use f to read the filename
+                bool found = false; // Flag to check if file is found
+                for (i = 0; i < dir.fcnt; i++) {
+                    if (strcmp(f, dir.fname[i]) == 0) { // If the file is found
+                        printf("File %s is deleted.\n", f);
+                        strcpy(dir.fname[i], dir.fname[dir.fcnt - 1]); // Replace with the last file
+                        dir.fcnt--; // Decrement file count
+                        found = true; // File found
+                        break;
+                    }
+                }
+                if (!found) { // If file wasn't found
+                    printf("File %s not found.\n", f);
+                }
+                break;
+
+            case 3: // Search File
+                printf("Enter the name of the file to search: ");
+                scanf("%9s", f); // Read the filename
+                found = false; // Reset found flag
+                for (i = 0; i < dir.fcnt; i++) {
+                    if (strcmp(f, dir.fname[i]) == 0) { // If file is found
+                        printf("File %s is found.\n", f);
+                        found = true; // File found
+                        break;
+                    }
+                }
+                if (!found) { // If file wasn't found
+                    printf("File %s not found.\n", f);
+                }
+                break;
+
+            case 4: // Display Files
+                if (dir.fcnt == 0) { // If directory is empty
+                    printf("Directory is empty.\n");
+                } else {
+                    printf("The files are:");
+                    for (i = 0; i < dir.fcnt; i++) {
+                        printf(" %s", dir.fname[i]); // List all files
+                    }
+                    printf("\n");
+                }
+                break;
+
+            case 5: // Exit
+                printf("Exiting...\n");
+                running = false; // Exit the loop
+                break;
+
+            default: // Invalid choice
+                printf("Invalid choice. Try again.\n");
+                break;
+        }
+    }
+
+    return 0; // Exit the program
+}
