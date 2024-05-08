@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+int main() {
+    int n; // Number of tracks
+        int t[20]; // Array to store track numbers
+    int tohm[19]; // Array to store the track movements
+    int tot = 0; // Total track movement
+
+
+
+    printf("Enter the number of tracks: "); 
+    if (scanf("%d", &n) != 1 || n < 2) { // Check if input is valid and at least 2
+        printf("Invalid number of tracks. There must be at least 2.\n");
+        return 1; // Exit if invalid input
+    }
+
+
+    printf("Enter the tracks to be traversed: "); 
+    for (int i = 0; i < n; i++) {
+        if (scanf("%d", &t[i]) != 1) {
+            printf("Invalid input. Please enter integer values for tracks.\n");
+            return 1; // Exit if invalid input
+        }
+    }
+
+    // Calculate the absolute differences between consecutive tracks
+    for (int i = 0; i < n - 1; i++) {
+        tohm[i] = t[i + 1] - t[i]; // Calculate difference
+        if (tohm[i] < 0) {
+            tohm[i] *= -1; // Convert to positive for absolute difference
+        }
+    }
+
+    // Calculate the total track movement
+    for (int i = 0; i < n - 1; i++) {
+        tot += tohm[i];
+    }
+
+    // Calculate the average header movement
+    float avhm = (float)tot / (n - 1); // Corrected division
+
+    // Display the results
+    printf("\nTracks traversed\tDifference between tracks\n");
+    for (int i = 0; i < n - 1; i++) {
+        printf("%d\t\t\t%d\n", t[i], tohm[i]); // Display track and difference
+    }
+    printf("\nAverage header movements: %.2f\n", avhm); // Display average with 2 decimal places
+
+    return 0; // Successful exit
+}
