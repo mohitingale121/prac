@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 25 // Renamed to uppercase for a constant
+
+int main() {
+    int frag[MAX], b[MAX], f[MAX], i, j;
+    int nb, nf;
+    int temp;
+
+    // Use zero-based indexing for static arrays
+    int bf[MAX] = {0}; // Block flags to track used blocks
+    int ff[MAX] = {0}; // File flags to store block assignment
+
+    printf("\n\tMemory Management Scheme - First Fit");
+
+    // Get the number of blocks and files
+    printf("\nEnter the number of blocks: ");
+    scanf("%d", &nb);
+    if (nb <= 0 || nb > MAX) {
+        printf("Invalid number of blocks.\n");
+        return 1; // Exit if invalid input
+    }
+
+    printf("Enter the number of files: ");
+    scanf("%d", &nf);
+    if (nf <= 0 || nf > MAX) {
+        printf("Invalid number of files.\n");
+        return 1; // Exit if invalid input
+    }
+
+    // Input block sizes
+    printf("\nEnter the size of the blocks:\n");
+    for (i = 0; i < nb; i++) {
+        printf("Block %d: ", i + 1);
+        scanf("%d", &b[i]);
+        if (b[i] <= 0) {
+            printf("Block size must be positive.\n");
+            return 1; // Exit if invalid input
+        }
+    }
+
+    // Input file sizes
+    printf("Enter the size of the files:\n");
+    for (i = 0; i < nf; i++) {
+        printf("File %d: ", i + 1); 
+        scanf("%d", &f[i]);
+        if (f[i] <= 0) {
+            printf("File size must be positive.\n");
+            return 1; // Exit if invalid input
+        }
+    }
+
+    // First Fit allocation
+    for (i = 0; i < nf; i++) {
+        temp = -1; // Default to invalid value
+        for (j = 0; j < nb; j++) {
+            if (bf[j] == 0) { // If block is not used
+                temp = b[j] - f[i];
+                if (temp >= 0) { // If the block can fit the file
+                    ff[i] = j; // Assign the block
+                    frag[i] = temp; // Calculate the fragmentation
+                    bf[j] = 1; // Mark block as used
+                    break; // Stop searching once a block is found
+                }
+            }
+        }
+    
+    }
+
+    // Output the allocation results
+    printf("\nFile_no\tFile_size\tBlock_no\tBlock_size\tFragmentation\n");
+    for (i = 0; i < nf; i++) {
+       
+            printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
+                   i + 1, f[i], ff[i] + 1, b[ff[i]], frag[i]);
+      
+    }
+
+    return 0;
+}
