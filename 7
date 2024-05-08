@@ -1,0 +1,76 @@
+#include <stdio.h> // Standard I/O functions
+#include <stdbool.h> // For boolean operations
+
+int main() {
+    int i, j, k, f, pf = 0; // Page fault counter
+    int count = 0; // Frame insertion index
+    int rs[25]; // Reference string
+    int m[10]; // Frames
+    int n; // Length of reference string
+    
+    printf("Enter the length of the reference string: "); 
+    if (scanf("%d", &n) != 1 || n <= 0 || n > 25) {
+        printf("Invalid reference string length.\n");
+        return 1; // Exit if input is invalid
+    }
+    
+    printf("Enter the reference string: "); 
+    for (i = 0; i < n; i++) {
+        if (scanf("%d", &rs[i]) != 1) { 
+            printf("Invalid reference string.\n");
+            return 1; // Exit if invalid input
+        }
+    }
+
+    printf("Enter the number of frames: "); 
+    if (scanf("%d", &f) != 1 || f <= 0 || f > 10) {
+        printf("Invalid number of frames.\n");
+        return 1; // Exit if input is invalid
+    }
+    
+    // Initialize frames to -1, indicating empty
+    for (i = 0; i < f; i++) {
+        m[i] = -1;
+    }
+
+    printf("The Page Replacement Process is:\n");
+    
+    for (i = 0; i < n; i++) {
+        bool found = false; // Check if page is already in frame
+        
+        // Check if the current reference is already in frames
+        for (k = 0; k < f; k++) {
+            if (m[k] == rs[i]) {
+                found = true;
+                break;
+            }
+        }
+        
+        // If not found, it's a page fault
+        if (!found) {
+            m[count] = rs[i]; // Add new page to frame
+            count = (count + 1) % f; // Update count to implement FIFO
+            pf++; // Increment page fault count
+        }
+        
+        // Display current state of frames
+        for (j = 0; j < f; j++) {
+            if (m[j] == -1) {
+                printf("\t-"); // Empty frame
+            } else {
+                printf("\t%d", m[j]); // Page in frame
+            }
+        }
+        
+        // Indicate if it's a page fault
+        if (!found) {
+            printf("\tPF No. %d", pf);
+        }
+        
+        printf("\n"); // Newline for next step
+    }
+    
+    printf("The total number of page faults using FIFO is: %d\n", pf);
+    
+    return 0; // Successful exit
+}
